@@ -21,19 +21,19 @@ services:
     networks:
       - elk
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.15.0
-    container_name: logstash
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
-      - ./logstash/ingest_data:/usr/share/logstash/ingest_data
-    ports:
-      - "6000:6000"
-      - "9600:9600"
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
+#  logstash:
+#    image: docker.elastic.co/logstash/logstash:8.15.0
+#    container_name: logstash
+#    volumes:
+#      - ./logstash/pipeline:/usr/share/logstash/pipeline
+#      - ./logstash/ingest_data:/usr/share/logstash/ingest_data
+#    ports:
+#      - "6000:6000"
+#      - "9600:9600"
+#    networks:
+#      - elk
+#    depends_on:
+#      - elasticsearch
 
 #  kibana:
 #    image: docker.elastic.co/kibana/kibana:8.15.0

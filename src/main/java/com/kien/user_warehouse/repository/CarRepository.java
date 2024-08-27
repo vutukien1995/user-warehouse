@@ -1,7 +1,6 @@
 package com.kien.user_warehouse.repository;
 
-import com.kien.user_warehouse.model.Car;
-import com.kien.user_warehouse.model.User;
+import com.kien.user_warehouse.entity.Car;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;
