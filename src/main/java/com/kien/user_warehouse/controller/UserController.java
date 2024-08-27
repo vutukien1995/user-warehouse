@@ -4,15 +4,26 @@ import com.kien.user_warehouse.entity.User;
 import com.kien.user_warehouse.model.UserSearchInput;
 import com.kien.user_warehouse.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author kienvt
@@ -70,6 +81,28 @@ public class UserController {
         model.addAttribute("navigation", "Search");
 
         return "user/search";
+    }
+
+    @GetMapping(path = "/user/export-file")
+    public ResponseEntity<Resource> download(String param) throws IOException {
+
+//        File file = new File(SERVER_LOCATION + File.separator + image + EXTENSION);
+        File file = new File("/Users/kienvt/lab/user-warehouse/src/main/resources/static/assets/img/ivancik.jpg");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=export-user.jpg");
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+
+        Path path = Paths.get(file.getAbsolutePath());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
 }
