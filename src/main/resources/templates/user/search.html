@@ -53,9 +53,9 @@
                                         </div>
                                     </div>
                                     <div class="col-12 text-end">
+                                        <input id="export-link" type="hidden" th:href="@{/user/export-file(firstname=${user.firstname},lastname=${user.lastname},address=${user.address},dob=${user.dob},zipcode=${user.zipcode},page=${page},size=${size})}">
                                         <a th:if="${total>0}"
-                                           th:href="@{/user/export-file(firstname=${user.firstname},lastname=${user.lastname},address=${user.address},dob=${user.dob},zipcode=${user.zipcode},page=${page},size=${size})}"
-                                           onclick="confirm('Wanna Export?');"
+                                           onclick="exportFile()"
                                            id="export-btn"
                                         >
                                             <button type="button" class="btn bg-gradient-success mx-2">Export</button>
@@ -182,6 +182,11 @@
     <script>
         function changeExport () {
             $("#export-btn").hide();
+        }
+
+        function exportFile() {
+            if (confirm("Wanna export?") == true)
+                window.location.href = $("#export-link").attr('href');
         }
     </script>
 

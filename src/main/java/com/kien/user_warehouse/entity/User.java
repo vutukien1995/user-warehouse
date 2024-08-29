@@ -96,7 +96,7 @@ public class User {
                 handleNull(alt1DOB) + "," +
                 handleNull(alt2DOB) + "," +
                 handleNull(alt3DOB) + "," +
-                handleNull(ssn) + ",";
+                handleNull(ssn);
     }
 
     private String handleNull(String str) {
