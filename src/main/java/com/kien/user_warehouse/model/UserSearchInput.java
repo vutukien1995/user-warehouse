@@ -8,11 +8,12 @@ import lombok.Data;
 @Data
 public class UserSearchInput {
 
-
     private String firstname;
     private String lastname;
     private String address;
     private String dob;
     private String zipcode;
+    private Integer page;
+    private Integer size;
 
 }

@@ -25,35 +25,41 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="firstname" class="form-control-label">First Name</label>
-                                            <input type="search" th:field="*{firstname}" class="form-control" id="firstname">
+                                            <input type="search" th:field="*{firstname}" class="form-control" id="firstname" onchange="changeExport()">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="lastname" class="form-control-label">Last Name</label>
-                                            <input type="search" th:field="*{lastname}" class="form-control" id="lastname">
+                                            <input type="search" th:field="*{lastname}" class="form-control" id="lastname" onchange="changeExport()">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="address" class="form-control-label">Address</label>
-                                            <input type="search" th:field="*{address}" class="form-control" id="address">
+                                            <input type="search" th:field="*{address}" class="form-control" id="address" onchange="changeExport()">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="dob" class="form-control-label">DOB</label>
-                                            <input type="search" th:field="*{dob}" class="form-control" id="dob">
+                                            <input type="search" th:field="*{dob}" class="form-control" id="dob" onchange="changeExport()">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="zipcode" class="form-control-label">Zipcode</label>
-                                            <input type="search" th:field="*{zipcode}" class="form-control" id="zipcode">
+                                            <input type="search" th:field="*{zipcode}" class="form-control" id="zipcode" onchange="changeExport()">
                                         </div>
                                     </div>
                                     <div class="col-12 text-end">
-                                        <button th:if="${total>0}" type="button" class="btn bg-gradient-success mx-3">Export</button>
+                                        <a th:if="${total>0}"
+                                           th:href="@{/user/export-file(firstname=${user.firstname},lastname=${user.lastname},address=${user.address},dob=${user.dob},zipcode=${user.zipcode},page=${page},size=${size})}"
+                                           onclick="confirm('Wanna Export?');"
+                                           id="export-btn"
+                                        >
+                                            <button type="button" class="btn bg-gradient-success mx-2">Export</button>
+                                        </a>
                                         <button type="submit" class="btn bg-gradient-primary">Search</button>
                                     </div>
                                 </div>
@@ -172,6 +178,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function changeExport () {
+            $("#export-btn").hide();
+        }
+    </script>
 
 </div>
 </body>

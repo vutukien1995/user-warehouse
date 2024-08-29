@@ -75,4 +75,31 @@ public class User {
     @Field(name = "ssn")
     private String ssn;
 
+    @Override
+    public String toString() {
+        return handleNull(ID) + "," +
+                handleNull(firstname) + "," +
+                handleNull(lastname) + "," +
+                handleNull(middlename) + "," +
+                handleNull(namesuff) + "," +
+                handleNull(dob)+ "," +
+                handleNull(address) + "," +
+                handleNull(city) + "," +
+                handleNull(countyname) + "," +
+                handleNull(st) + "," +
+                handleNull(zip) + "," +
+                handleNull(phone1) + "," +
+                handleNull(aka1fullname) + "," +
+                handleNull(aka2fullname) + "," +
+                handleNull(aka3fullname) + "," +
+                handleNull(StartDat) + "," +
+                handleNull(alt1DOB) + "," +
+                handleNull(alt2DOB) + "," +
+                handleNull(alt3DOB) + "," +
+                handleNull(ssn) + ",";
+    }
+
+    private String handleNull(String str) {
+        return (str == null) ? "" : str;
+    }
 }

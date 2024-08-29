@@ -3,6 +3,7 @@ package com.kien.user_warehouse.controller;
 import com.kien.user_warehouse.entity.User;
 import com.kien.user_warehouse.model.UserSearchInput;
 import com.kien.user_warehouse.repository.UserRepository;
+import com.kien.user_warehouse.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -24,6 +25,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author kienvt
@@ -33,6 +37,7 @@ import java.nio.file.Paths;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/user")
     public String index() {
@@ -84,17 +89,43 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/export-file")
-    public ResponseEntity<Resource> download(String param) throws IOException {
+    public ResponseEntity<Resource> download(@ModelAttribute("user") UserSearchInput userSearchInput) throws IOException {
 
-//        File file = new File(SERVER_LOCATION + File.separator + image + EXTENSION);
-        File file = new File("/Users/kienvt/lab/user-warehouse/src/main/resources/static/assets/img/ivancik.jpg");
+        if (Objects.isNull(userSearchInput.getFirstname())) userSearchInput.setFirstname("");
+        if (Objects.isNull(userSearchInput.getLastname())) userSearchInput.setLastname("");
+        if (Objects.isNull(userSearchInput.getAddress())) userSearchInput.setAddress("");
+        if (Objects.isNull(userSearchInput.getDob())) userSearchInput.setDob("");
+        if (Objects.isNull(userSearchInput.getZipcode())) userSearchInput.setZipcode("");
+
+        if (Objects.isNull(userSearchInput.getPage())) userSearchInput.setPage(0);
+        if (Objects.isNull(userSearchInput.getSize())) userSearchInput.setSize(50);
+
+        List<User> userList = new ArrayList<>();
+        if (StringUtils.hasText(userSearchInput.getFirstname())
+                || StringUtils.hasText(userSearchInput.getLastname())
+                || StringUtils.hasText(userSearchInput.getAddress())
+                || StringUtils.hasText(userSearchInput.getDob())
+                || StringUtils.hasText(userSearchInput.getZipcode())) {
+            Pageable pageable = PageRequest.of(userSearchInput.getPage(), userSearchInput.getSize());
+            Page<User> userPage;
+            userPage = userRepository.findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContains(
+                    userSearchInput.getFirstname(),
+                    userSearchInput.getLastname(),
+                    userSearchInput.getAddress(),
+                    userSearchInput.getDob(),
+                    userSearchInput.getZipcode(),
+                    pageable);
+
+            userList = userPage.getContent();
+        }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=export-user.jpg");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=export-user.csv");
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
 
+        File file = new File(userService.exportFile(userList));
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
