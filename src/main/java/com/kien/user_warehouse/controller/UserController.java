@@ -46,6 +46,8 @@ public class UserController {
 
     @GetMapping("/user/dashboard")
     public String dashboard(Model model) {
+        String total_users = String.format("%,d", userRepository.count());
+        model.addAttribute("total_users", total_users);
         model.addAttribute("navigation", "Dashboard");
         return "user/dashboard";
     }
