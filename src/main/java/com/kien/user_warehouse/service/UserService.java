@@ -49,15 +49,16 @@ public class UserService {
     }
 
     public String exportFile (List<User> list) throws IOException {
-        String path = location + File.separator+"export-file.csv";
+        String path = location + File.separator+"export-file.txt";
 
         FileWriter fileWriter = new FileWriter(path);
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.println("ID,firstname,lastname,middlename,name_suff,dob,address,city,county_name,st,zip," +
-                "phone1,aka1fullname,aka2fullname,aka3fullname,StartDat,alt1DOB,alt2DOB,alt3DOB,ssn");
 
+        int i = 1;
         for (User user : list) {
+            printWriter.println("SSN Lookup - Person " + i + ":");
             printWriter.println(user);
+            i++;
         }
         printWriter.close();
 

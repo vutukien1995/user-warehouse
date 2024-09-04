@@ -122,7 +122,7 @@ public class UserController {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=export-user.csv");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=export-user.txt");
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");

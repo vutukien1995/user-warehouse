@@ -55,22 +55,4 @@ public class CarController {
         return carRepository.findAllByBrand(brand);
     }
 
-    @GetMapping("/user")
-    public List<User> findAllUser(@RequestParam String name) {
-        Pageable pageable = PageRequest.of(0, 50);
-        Page<User> userPage = userRepository.findAll(pageable);
-
-        return userPage.getContent();
-    }
-
-    @GetMapping("/alluser")
-    public Iterable<User> getAllUser() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping("/deleteuser")
-    public String deleteuser() {
-        userRepository.deleteAll();
-        return "delete all";
-    }
 }
