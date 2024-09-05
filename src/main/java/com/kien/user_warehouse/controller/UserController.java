@@ -127,7 +127,7 @@ public class UserController {
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
 
-        File file = new File(userService.exportFile(userList));
+        File file = userService.exportFile(userList);
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 

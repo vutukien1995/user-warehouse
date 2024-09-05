@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.core.query.Field;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -48,10 +49,15 @@ public class UserService {
         return new CriteriaQuery(criteria);
     }
 
-    public String exportFile (List<User> list) throws IOException {
-        String path = location + File.separator+"export-file.txt";
-
-        FileWriter fileWriter = new FileWriter(path);
+    public File exportFile (List<User> list) throws IOException {
+        File dir = new File(location + File.separator);
+        File file = new File(location + File.separator + "export-file.txt");
+        if (!file.exists()) {
+            dir.mkdir();
+            file.createNewFile();
+            System.out.println("Create file export-file.txt");
+        }
+        FileWriter fileWriter = new FileWriter(file);
         PrintWriter printWriter = new PrintWriter(fileWriter);
 
         int i = 1;
@@ -62,7 +68,7 @@ public class UserService {
         }
         printWriter.close();
 
-        return path;
+        return file;
     }
 
 }
