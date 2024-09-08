@@ -1,6 +1,9 @@
 package com.kien.user_warehouse.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -10,13 +13,13 @@ import org.springframework.data.elasticsearch.annotations.Field;
  */
 @Data
 @Document(indexName = "user")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User {
 
     @Id
     private String _id;
-
-    @Field(name = "ID")
-    private String ID;
 
     @Field(name = "firstname")
     private String firstname;
@@ -47,30 +50,6 @@ public class User {
 
     @Field(name = "zip")
     private String zip;
-
-    @Field(name = "phone1")
-    private String phone1;
-
-    @Field(name = "aka1fullname")
-    private String aka1fullname;
-
-    @Field(name = "aka2fullname")
-    private String aka2fullname;
-
-    @Field(name = "aka3fullname")
-    private String aka3fullname;
-
-    @Field(name = "StartDat")
-    private String StartDat;
-
-    @Field(name = "alt1DOB")
-    private String alt1DOB;
-
-    @Field(name = "alt2DOB")
-    private String alt2DOB;
-
-    @Field(name = "alt3DOB")
-    private String alt3DOB;
 
     @Field(name = "ssn")
     private String ssn;
@@ -105,7 +84,7 @@ public class User {
                         .append(handleNull(middlename)).append(" ")
                         .append(handleNull(lastname)).append(" ").append("\r\n");
         str.append(" Date Of Birth: ").append(handleNull(dob)).append("\r\n");
-        str.append(" Social Security Number: ").append(handleNull(phone1)).append("\r\n");
+        str.append(" Social Security Number: ").append(handleNull(ssn)).append("\r\n");
         str.append(" Addresses: ").append("\r\n");
         str.append("  No. 1 ").append("\r\n");
         str.append("   Full Address: ").append(handleNull(address)).append("\r\n");

@@ -19,6 +19,11 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+      interval: 30s
+      timeout: 10s
+      retries: 30
 
 #  elasticsearch1:
 #    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
@@ -62,7 +67,7 @@ services:
 #      resources:
 #        limits:
 #          memory: 1500m
-
+#
 #  elasticsearch2:
 #    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
 #    container_name: elasticsearch2
@@ -120,7 +125,7 @@ services:
 #      - "node.name=elasticsearch3"
 #      - "bootstrap.memory_lock=true"
 #      - "cluster.name=es-cluster"
-#      - "discovery.seed_hosts=elasticsearch2,elasticsearch3"
+#      - "discovery.seed_hosts=elasticsearch1,elasticsearch2"
 #      - "cluster.initial_master_nodes=elasticsearch1,elasticsearch2,elasticsearch3"
 #      - "ES_JAVA_OPTS=-Xms512m -Xmx512m -Des.index.number_of_replicas=0 -Des.enforce.bootstrap.checks=true"
 #      - "xpack.security.enabled=false"
@@ -140,19 +145,20 @@ services:
 #      memlock:
 #        soft: -1
 #        hard: -1
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
-    container_name: logstash
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
-      - ./logstash/logstash_ingest_data/:/usr/share/logstash/ingest_data
-    ports:
-      - "6000:6000"
-      - "9600:9600"
-    depends_on:
-      - elasticsearch1
-
+#
+#  logstash:
+#    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+#    container_name: logstash
+#    volumes:
+#      - ./logstash/pipeline:/usr/share/logstash/pipeline
+#      - ./logstash/logstash_ingest_data/:/usr/share/logstash/ingest_data
+#    ports:
+#      - "6000:6000"
+#      - "9600:9600"
+#    depends_on:
+#      elasticsearch1:
+#        condition: service_healthy
+#
 #  kibana:
 #    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
 #    container_name: kibana
@@ -161,13 +167,23 @@ services:
 #    environment:
 #      ELASTICSEARCH_URL: http://elasticsearch1:9200
 #      ELASTICSEARCH_HOSTS: '["http://elasticsearch1:9200","http://elasticsearch2:9200","http://elasticsearch3:9200"]'
+#    depends_on:
+#      elasticsearch1:
+#        condition: service_healthy
 
   app:
-    image: kienonwork/user-warehouse
+    image: docker.io/kienonwork/user-warehouse
     container_name: user-warehouse
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
       spring.elasticsearch.uris: http://elasticsearch1:9200
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 30s
+      timeout: 10s
+      retries: 30
     depends_on:
-      - elasticsearch1
+      elasticsearch1:
+        condition: service_healthy

@@ -16,7 +16,7 @@
                 <div class="card-body px-0 pt-0 pb-2">
 
                     <!-- Start form search -->
-                    <form action="#" method="get" th:action="@{/user/search}" th:object="${user}">
+                    <form method="get" th:action="@{/user/search}" th:object="${user}">
                         <div class="row mb-4 mx-3">
                             <div class="col-lg-1">
                             </div>
@@ -52,8 +52,23 @@
                                             <input type="search" th:field="*{zipcode}" class="form-control" id="zipcode" onchange="changeExport()">
                                         </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="ssn" class="form-control-label">SSN</label>
+                                            <input type="search" th:field="*{ssn}" class="form-control" id="ssn" onchange="changeExport()">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="st" class="form-control-label">ST</label>
+                                            <input type="search" th:field="*{st}" class="form-control" id="st" onchange="changeExport()">
+                                        </div>
+                                    </div>
                                     <div class="col-12 text-end">
-                                        <input id="export-link" type="hidden" th:href="@{/user/export-file(firstname=${user.firstname},lastname=${user.lastname},address=${user.address},dob=${user.dob},zipcode=${user.zipcode},page=${page},size=${size})}">
+                                        <input id="export-link" type="hidden" th:href="@{/user/export-file(firstname=${user.firstname},lastname=${user.lastname},address=${user.address},
+                                        dob=${user.dob},zipcode=${user.zipcode},ssn=${user.ssn},st=${user.st},page=${page},size=${size})}">
+                                        <input id="search-link" type="hidden" th:href="@{/user/export-file(firstname=${user.firstname},lastname=${user.lastname},address=${user.address},
+                                        dob=${user.dob},zipcode=${user.zipcode},ssn=${user.ssn},st=${user.st},size=${size})}">
                                         <a th:if="${total>0}"
                                            onclick="exportFile()"
                                            id="export-btn"
@@ -73,7 +88,7 @@
                             <thead>
                             <tr>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">SSN</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">First Name</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Last Name</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Middle Name</th>
@@ -84,22 +99,14 @@
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">County Name</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ST</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Zip</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone1</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">aka1fullname</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">aka2fullname</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">aka3fullname</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">StartDat</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">alt1DOB</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">alt2DOB</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">alt3DOB</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ssn</th>
+
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="user,i : ${users}">
                                 <th class="align-middle text-center"><span class="text-xs font-weight-bold">[[${i.index + 1}]]</span></th>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.ID}]]</span></td>
+                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.ssn}]]</span></td>
                                 <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.firstname}]]</span></td>
                                 <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.lastname}]]</span></td>
                                 <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.middlename}]]</span></td>
@@ -110,15 +117,7 @@
                                 <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.countyname}]]</span></td>
                                 <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.st}]]</span></td>
                                 <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.zip}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.phone1}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.aka1fullname}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.aka2fullname}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.aka3fullname}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.StartDat}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.alt1DOB}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.alt2DOB}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.alt3DOB}]]</span></td>
-                                <td class="align-middle text-center"><span class="text-xs font-weight-bold">[[${user.ssn}]]</span></td>
+
                             </tr>
                             </tbody>
                         </table>
@@ -187,6 +186,10 @@
         function exportFile() {
             if (confirm("Wanna export?") == true)
                 window.location.href = $("#export-link").attr('href');
+        }
+
+        function callSearch() {
+            window.location.href = $("#search-link").attr('href');
         }
     </script>
 

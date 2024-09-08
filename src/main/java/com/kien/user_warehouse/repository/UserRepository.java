@@ -18,8 +18,8 @@ public interface UserRepository extends ElasticsearchRepository<User, String> {
     @Query("{\"bool\": {\"must\": [{\"match\": {\"firstname\": \"?0\"}}]}}")
     Page<User> findByFirstnameUsingCustomQuery(String name, Pageable pageable);
 
-    Page<User> findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContains (
-            String firstname, String lastname, String address,
-             String dob, String zip, Pageable pageable);
+    Page<User> findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContainsAndSsnContainsAndStContains (
+            String firstname, String lastname, String address, String dob, String zip,
+            String ssn, String st, Pageable pageable);
 
 }

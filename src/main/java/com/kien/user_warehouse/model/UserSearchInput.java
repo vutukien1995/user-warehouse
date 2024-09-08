@@ -13,6 +13,8 @@ public class UserSearchInput {
     private String address;
     private String dob;
     private String zipcode;
+    private String ssn;
+    private String st;
     private Integer page;
     private Integer size;
 
