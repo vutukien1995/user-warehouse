@@ -56,7 +56,7 @@ public class UserService {
         return new CriteriaQuery(criteria);
     }
 
-    public File exportFile (List<User> list) throws IOException {
+    public File exportFile(List<User> list) throws IOException {
         File dir = new File(LOCATION + File.separator);
         File file = new File(LOCATION + File.separator + "export-file.txt");
         if (!file.exists()) {
@@ -79,13 +79,13 @@ public class UserService {
     }
 
     public Response<List<User>> searchUser(UserSearchInput userSearchInput) {
-        if ( !(StringUtils.hasText(userSearchInput.getFirstname())
+        if (!(StringUtils.hasText(userSearchInput.getFirstname())
                 || StringUtils.hasText(userSearchInput.getLastname())
                 || StringUtils.hasText(userSearchInput.getAddress())
                 || StringUtils.hasText(userSearchInput.getDob())
                 || StringUtils.hasText(userSearchInput.getZipcode())
                 || StringUtils.hasText(userSearchInput.getSsn())
-                || StringUtils.hasText(userSearchInput.getSt())) ) {
+                || StringUtils.hasText(userSearchInput.getSt()))) {
             return new Response<>(true, 0, new ArrayList<>());
         }
 
@@ -138,7 +138,7 @@ public class UserService {
         if (Objects.isNull(userSearchInput.getSize())) userSearchInput.setSize(DEFAULT_SIZE);
     }
 
-    private void createQueryString (UserSearchInput userSearchInput, SearchUserRequest.Bool bool) {
+    private void createQueryString(UserSearchInput userSearchInput, SearchUserRequest.Bool bool) {
         bool.setMust(new ArrayList<>());
 
         if (StringUtils.hasText(userSearchInput.getFirstname()))

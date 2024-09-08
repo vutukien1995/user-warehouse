@@ -9,7 +9,7 @@ import java.util.Map;
 public class RestClientUtils {
 
     @SneakyThrows
-    public static String get(String url, Map <String, String> mapHeaders, String authorization) {
+    public static String get(String url, Map<String, String> mapHeaders, String authorization) {
         Map<String, String> headers = new HashMap<>();
         headers.put("accept", "application/json");
         headers.putAll(mapHeaders);
@@ -20,7 +20,7 @@ public class RestClientUtils {
     }
 
     @SneakyThrows
-    public static String post(String url, Map <String, String> mapHeaders, String input){
+    public static String post(String url, Map<String, String> mapHeaders, String input) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         headers.put("accept", "application/json");
