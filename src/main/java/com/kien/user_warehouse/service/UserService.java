@@ -159,6 +159,8 @@ public class UserService {
         if (StringUtils.hasText(userSearchInput.getSsn()))
             bool.getMust().add(createMust("ssn", userSearchInput.getSsn()));
 
+        if (StringUtils.hasText(userSearchInput.getSt()))
+            bool.getMust().add(createMust("st", userSearchInput.getSt()));
     }
 
     private List<User> responseToUser(SearchUserResponse searchUserResponse) {
