@@ -35,6 +35,8 @@ public class UserService {
     private Integer DEFAULT_SIZE;
     @Value("${app.export.location}")
     private String LOCATION;
+    @Value("${app.user.alias}")
+    private String USER_ALIAS;
 
     @Autowired
     ElasticsearchOperations esTemplate;
@@ -92,7 +94,9 @@ public class UserService {
         Gson gson = new Gson();
         verifyInput(userSearchInput);
 
-        String url = ELASTIC_URL + "/user/_search?typed_keys=true&search_type=query_then_fetch";
+        String index = USER_ALIAS;
+
+        String url = ELASTIC_URL + "/" + index + "/_search?typed_keys=true&search_type=query_then_fetch";
         Map<String, String> headers = new HashMap<>();
         SearchUserRequest searchUserRequest = new SearchUserRequest();
         searchUserRequest.setFrom(userSearchInput.getPage());

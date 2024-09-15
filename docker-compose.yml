@@ -10,14 +10,12 @@ services:
       - xpack.security.enabled=false
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - path.data=/usr/share/elasticsearch/data/disk1,/usr/share/elasticsearch/data/disk2
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ./es_data_disk1:/usr/share/elasticsearch/data/disk1
-      - ./es_data_disk2:/usr/share/elasticsearch/data/disk2
+      - ./es_data_1:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -161,31 +159,31 @@ services:
       elasticsearch1:
         condition: service_healthy
 
-#  kibana:
-#    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-#    container_name: kibana
-#    ports:
-#      - 5601:5601
-#    environment:
-#      ELASTICSEARCH_URL: http://elasticsearch1:9200
-#      ELASTICSEARCH_HOSTS: '["http://elasticsearch1:9200","http://elasticsearch2:9200","http://elasticsearch3:9200"]'
-#    depends_on:
-#      elasticsearch1:
-#        condition: service_healthy
-
-  app:
-    image: docker.io/kienonwork/user-warehouse
-    container_name: user-warehouse
-    restart: unless-stopped
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
     ports:
-      - "8080:8080"
+      - 5601:5601
     environment:
-      spring.elasticsearch.uris: http://elasticsearch1:9200
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
-      interval: 30s
-      timeout: 10s
-      retries: 30
+      ELASTICSEARCH_URL: http://elasticsearch1:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch1:9200","http://elasticsearch2:9200","http://elasticsearch3:9200"]'
     depends_on:
       elasticsearch1:
         condition: service_healthy
+
+#  app:
+#    image: docker.io/kienonwork/user-warehouse
+#    container_name: user-warehouse
+#    restart: unless-stopped
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      spring.elasticsearch.uris: http://elasticsearch1:9200
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 30
+#    depends_on:
+#      elasticsearch1:
+#        condition: service_healthy
