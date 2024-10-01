@@ -2,9 +2,6 @@ package com.kien.user_warehouse.model;
 
 import lombok.Data;
 
-/**
- * @author kienvt
- */
 @Data
 public class UserSearchInput {
 

@@ -7,13 +7,7 @@ import com.kien.user_warehouse.model.SearchUserRequest;
 import com.kien.user_warehouse.model.SearchUserResponse;
 import com.kien.user_warehouse.model.UserSearchInput;
 import com.kien.user_warehouse.util.RestClientUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,9 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-/**
- * @author kienvt
- */
 @Service
 public class UserService {
 
@@ -37,26 +28,6 @@ public class UserService {
     private String LOCATION;
     @Value("${app.user.alias}")
     private String USER_ALIAS;
-
-    @Autowired
-    ElasticsearchOperations esTemplate;
-
-    public SearchHits<User> searchUser(String name,
-                                       Pageable pageable) {
-        CriteriaQuery query = buildSearchQuery(name);
-        query.setPageable(pageable);
-
-        return esTemplate.search(query, User.class);
-    }
-
-    private CriteriaQuery buildSearchQuery(String name) {
-        var criteria = new Criteria();
-        if (StringUtils.hasText(name)) {
-            criteria.and(new Criteria("firstname").contains(name));
-        }
-
-        return new CriteriaQuery(criteria);
-    }
 
     public File exportFile(List<User> list) throws IOException {
         File dir = new File(LOCATION + File.separator);
@@ -125,6 +96,10 @@ public class UserService {
             int totalPage = searchUserResponse.getHits().getTotal().getValue() / userSearchInput.getSize() + 1;
             return new Response<>(true, totalPage, responseToUser(searchUserResponse));
         }
+    }
+
+    public Long count() {
+        return 10L;
     }
 
 

@@ -62,3 +62,4 @@ replay_pid*
 # Data
 es_data_1/
 export-files/
+db_data/

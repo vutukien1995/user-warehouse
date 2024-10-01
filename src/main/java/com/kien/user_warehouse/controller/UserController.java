@@ -3,7 +3,6 @@ package com.kien.user_warehouse.controller;
 import com.kien.user_warehouse.entity.User;
 import com.kien.user_warehouse.model.Response;
 import com.kien.user_warehouse.model.UserSearchInput;
-import com.kien.user_warehouse.repository.UserRepository;
 import com.kien.user_warehouse.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -24,14 +23,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-/**
- * @author kienvt
- */
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
     @GetMapping("/user")
@@ -41,7 +36,7 @@ public class UserController {
 
     @GetMapping("/user/dashboard")
     public String dashboard(Model model) {
-        String total_users = String.format("%,d", userRepository.count());
+        String total_users = String.format("%,d", userService.count());
         model.addAttribute("total_users", total_users);
         model.addAttribute("navigation", "Dashboard");
         return "user/dashboard";

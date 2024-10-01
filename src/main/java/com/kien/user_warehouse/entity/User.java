@@ -8,9 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 
-/**
- * @author kienvt
- */
 @Data
 @Document(indexName = "user_alias")
 @AllArgsConstructor
@@ -56,35 +53,35 @@ public class User {
 
     @Override
     public String toString() {
-        return handleNull(ssn) + "," +
-                handleNull(firstname) + "," +
-                handleNull(lastname) + "," +
-                handleNull(middlename) + "," +
-                handleNull(namesuff) + "," +
-                handleNull(dob)+ "," +
-                handleNull(address) + "," +
-                handleNull(city) + "," +
-                handleNull(countyname) + "," +
-                handleNull(st) + "," +
-                handleNull(zip) + ",";
+//        return handleNull(ssn) + "," +
+//                handleNull(firstname) + "," +
+//                handleNull(lastname) + "," +
+//                handleNull(middlename) + "," +
+//                handleNull(namesuff) + "," +
+//                handleNull(dob)+ "," +
+//                handleNull(address) + "," +
+//                handleNull(city) + "," +
+//                handleNull(countyname) + "," +
+//                handleNull(st) + "," +
+//                handleNull(zip) + ",";
 
-//        StringBuilder str = new StringBuilder();
-//        str.append(" First Name: ").append(handleNull(firstname)).append("\r\n");
-//        str.append(" Middle Name: ").append(handleNull(middlename)).append("\r\n");
-//        str.append(" Last Name: ").append(handleNull(lastname)).append("\r\n");
-//        str.append(" Full Name: ").append(handleNull(firstname)).append(" ")
-//                        .append(handleNull(middlename)).append(" ")
-//                        .append(handleNull(lastname)).append(" ").append("\r\n");
-//        str.append(" Date Of Birth: ").append(handleNull(dob)).append("\r\n");
-//        str.append(" Social Security Number: ").append(handleNull(ssn)).append("\r\n");
-//        str.append(" Addresses: ").append("\r\n");
-//        str.append("  No. 1 ").append("\r\n");
-//        str.append("   Full Address: ").append(handleNull(address)).append("\r\n");
-//        str.append("   City: ").append(handleNull(city)).append("\r\n");
-//        str.append("   State Code: ").append(handleNull(st)).append("\r\n");
-//        str.append("   Zip Code: ").append(handleNull(zip)).append("\r\n");
-//
-//        return str.toString();
+        StringBuilder str = new StringBuilder();
+        str.append(" First Name: ").append(handleNull(firstname)).append("\r\n");
+        str.append(" Middle Name: ").append(handleNull(middlename)).append("\r\n");
+        str.append(" Last Name: ").append(handleNull(lastname)).append("\r\n");
+        str.append(" Full Name: ").append(handleNull(firstname)).append(" ")
+                        .append(handleNull(middlename)).append(" ")
+                        .append(handleNull(lastname)).append(" ").append("\r\n");
+        str.append(" Date Of Birth: ").append(handleNull(dob)).append("\r\n");
+        str.append(" Social Security Number: ").append(handleNull(ssn)).append("\r\n");
+        str.append(" Addresses: ").append("\r\n");
+        str.append("  No. 1 ").append("\r\n");
+        str.append("   Full Address: ").append(handleNull(address)).append("\r\n");
+        str.append("   City: ").append(handleNull(city)).append("\r\n");
+        str.append("   State Code: ").append(handleNull(st)).append("\r\n");
+        str.append("   Zip Code: ").append(handleNull(zip)).append("\r\n");
+
+        return str.toString();
     }
 
     private String handleNull(String str) {

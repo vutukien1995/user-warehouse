@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * @author kienvt
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
