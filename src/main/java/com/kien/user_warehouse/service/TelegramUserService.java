@@ -1,7 +1,7 @@
 package com.kien.user_warehouse.service;
 
 import com.kien.user_warehouse.entity.TelegramUser;
-import com.kien.user_warehouse.model.CreateTelegramUserInput;
+import com.kien.user_warehouse.model.RegisterTelegramUserInput;
 import com.kien.user_warehouse.model.DepositInput;
 import com.kien.user_warehouse.repository.TelegramUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,11 @@ public class TelegramUserService {
     @Autowired
     TelegramUserRepository telegramUserRepository;
 
-    public Object create(CreateTelegramUserInput input) {
+    public Object getAll() {
+        return telegramUserRepository.findAll();
+    }
+
+    public Object register(RegisterTelegramUserInput input) {
         List<TelegramUser> telegramUsers = telegramUserRepository.findByUsername(input.getUsername());
 
         if (CollectionUtils.isEmpty(telegramUsers)) {

@@ -7,6 +7,7 @@ public class UserSearchInput {
 
     private String firstname;
     private String lastname;
+    private String middlename;
     private String address;
     private String dob;
     private String zipcode;

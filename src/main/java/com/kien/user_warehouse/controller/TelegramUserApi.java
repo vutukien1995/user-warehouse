@@ -1,28 +1,31 @@
 package com.kien.user_warehouse.controller;
 
-import com.kien.user_warehouse.model.CreateTelegramUserInput;
+import com.kien.user_warehouse.model.RegisterTelegramUserInput;
 import com.kien.user_warehouse.model.DepositInput;
 import com.kien.user_warehouse.service.TelegramUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("telegram_user")
-@RequiredArgsConstructor
+@RequestMapping("/telegram_user")
 public class TelegramUserApi {
 
     @Autowired
     TelegramUserService telegramUserService;
 
-    @GetMapping("hello")
+    @GetMapping("/hello")
     public String hello () {
         return "telegram user hello !";
     }
 
-    @PostMapping("")
-    public Object create(@RequestBody CreateTelegramUserInput input) {
-        return telegramUserService.create(input);
+    @GetMapping("")
+    public Object get () {
+        return telegramUserService.getAll();
+    }
+
+    @PostMapping("/register")
+    public Object register(@RequestBody RegisterTelegramUserInput input) {
+        return telegramUserService.register(input);
     }
 
     @PostMapping("/deposit")

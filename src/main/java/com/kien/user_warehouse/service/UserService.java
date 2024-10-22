@@ -7,6 +7,7 @@ import com.kien.user_warehouse.model.SearchUserRequest;
 import com.kien.user_warehouse.model.SearchUserResponse;
 import com.kien.user_warehouse.model.UserSearchInput;
 import com.kien.user_warehouse.util.RestClientUtils;
+import com.kien.user_warehouse.util.UserUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -40,27 +41,50 @@ public class UserService {
         FileWriter fileWriter = new FileWriter(file);
         PrintWriter printWriter = new PrintWriter(fileWriter);
 
+//        Set<String> ssnList = UserUtils.getSsnList(list);
+//        int i = 1;
+//        for (String ssn : ssnList) {
+//            printWriter.println("SSN Lookup - Person " + i + ":");
+//            printWriter.println(UserUtils.getUserStr(list, ssn));
+//            i++;
+//        }
         int i = 1;
         for (User user : list) {
             printWriter.println("SSN Lookup - Person " + i + ":");
             printWriter.println(user);
             i++;
         }
+
         printWriter.close();
 
         return file;
     }
 
     public Response<List<User>> searchUser(UserSearchInput userSearchInput) {
+        SearchUserResponse searchUserResponse = callElasticSearchUser(userSearchInput);
+
+        if (searchUserResponse == null) {
+            return new Response<>(true, 0, new ArrayList<>());
+        }
+
+        if (searchUserResponse.getHits().getTotal().getValue() <= 0) {
+            return new Response<>(true, 0, new ArrayList<>());
+        }
+
+        int totalPage = searchUserResponse.getHits().getTotal().getValue() / userSearchInput.getSize() + 1;
+        return new Response<>(true, totalPage, UserUtils.responseToUser(searchUserResponse));
+    }
+
+    public SearchUserResponse callElasticSearchUser(UserSearchInput userSearchInput) {
         if (!(StringUtils.hasText(userSearchInput.getFirstname())
                 || StringUtils.hasText(userSearchInput.getLastname())
+                || StringUtils.hasText(userSearchInput.getMiddlename())
                 || StringUtils.hasText(userSearchInput.getAddress())
                 || StringUtils.hasText(userSearchInput.getDob())
                 || StringUtils.hasText(userSearchInput.getZipcode())
                 || StringUtils.hasText(userSearchInput.getSsn())
-                || StringUtils.hasText(userSearchInput.getSt()))) {
-            return new Response<>(true, 0, new ArrayList<>());
-        }
+                || StringUtils.hasText(userSearchInput.getSt())))
+            return null;
 
         Gson gson = new Gson();
         verifyInput(userSearchInput);
@@ -88,14 +112,7 @@ public class UserService {
         String response = RestClientUtils.post(url, headers, new Gson().toJson(searchUserRequest));
         System.out.println("[Response] " + response);
 
-        SearchUserResponse searchUserResponse = gson.fromJson(response, SearchUserResponse.class);
-
-        if (searchUserResponse.getHits().getTotal().getValue() <= 0) {
-            return new Response<>(true, 0, new ArrayList<>());
-        } else {
-            int totalPage = searchUserResponse.getHits().getTotal().getValue() / userSearchInput.getSize() + 1;
-            return new Response<>(true, totalPage, responseToUser(searchUserResponse));
-        }
+        return gson.fromJson(response, SearchUserResponse.class);
     }
 
     public Long count() {
@@ -107,6 +124,7 @@ public class UserService {
     private void verifyInput(UserSearchInput userSearchInput) {
         if (Objects.isNull(userSearchInput.getFirstname())) userSearchInput.setFirstname("");
         if (Objects.isNull(userSearchInput.getLastname())) userSearchInput.setLastname("");
+        if (Objects.isNull(userSearchInput.getMiddlename())) userSearchInput.setMiddlename("");
         if (Objects.isNull(userSearchInput.getAddress())) userSearchInput.setAddress("");
         if (Objects.isNull(userSearchInput.getDob())) userSearchInput.setDob("");
         if (Objects.isNull(userSearchInput.getZipcode())) userSearchInput.setZipcode("");
@@ -125,6 +143,9 @@ public class UserService {
 
         if (StringUtils.hasText(userSearchInput.getLastname()))
             bool.getMust().add(createMust("lastname", userSearchInput.getLastname()));
+
+        if (StringUtils.hasText(userSearchInput.getMiddlename()))
+            bool.getMust().add(createMust("middlename", userSearchInput.getMiddlename()));
 
         if (StringUtils.hasText(userSearchInput.getAddress()))
             bool.getMust().add(createMust("address", userSearchInput.getAddress()));
