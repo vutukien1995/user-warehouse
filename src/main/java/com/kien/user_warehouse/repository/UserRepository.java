@@ -22,4 +22,8 @@ public interface UserRepository extends ElasticsearchRepository<User, String> {
             String firstname, String lastname, String address,
              String dob, String zip, Pageable pageable);
 
+    Page<User> findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContainsAndSsnContains (
+            String firstname, String lastname, String address,
+            String dob, String zip, String ssn, Pageable pageable);
+
 }

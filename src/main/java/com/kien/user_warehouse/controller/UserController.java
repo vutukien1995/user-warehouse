@@ -63,18 +63,21 @@ public class UserController {
         if (userSearchInput.getAddress() == null) userSearchInput.setAddress("");
         if (userSearchInput.getDob() == null) userSearchInput.setDob("");
         if (userSearchInput.getZipcode() == null) userSearchInput.setZipcode("");
+        if (userSearchInput.getSsn() == null) userSearchInput.setSsn("");
 
         Pageable pageable = PageRequest.of(page, size);
         Page<User> userPage;
         if (StringUtils.hasText(userSearchInput.getFirstname())
                 || StringUtils.hasText(userSearchInput.getLastname())
-        || StringUtils.hasText(userSearchInput.getAddress()) ) {
-            userPage = userRepository.findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContains(
+                || StringUtils.hasText(userSearchInput.getAddress())
+                || StringUtils.hasText(userSearchInput.getSsn())) {
+            userPage = userRepository.findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContainsAndSsnContains(
                     userSearchInput.getFirstname(),
                     userSearchInput.getLastname(),
                     userSearchInput.getAddress(),
                     userSearchInput.getDob(),
                     userSearchInput.getZipcode(),
+                    userSearchInput.getSsn(),
                     pageable);
             model.addAttribute("users", userPage.getContent());
             model.addAttribute("total", userPage.getTotalPages());
@@ -98,6 +101,7 @@ public class UserController {
         if (Objects.isNull(userSearchInput.getAddress())) userSearchInput.setAddress("");
         if (Objects.isNull(userSearchInput.getDob())) userSearchInput.setDob("");
         if (Objects.isNull(userSearchInput.getZipcode())) userSearchInput.setZipcode("");
+        if (Objects.isNull(userSearchInput.getSsn())) userSearchInput.setSsn("");
 
         if (Objects.isNull(userSearchInput.getPage())) userSearchInput.setPage(0);
         if (Objects.isNull(userSearchInput.getSize())) userSearchInput.setSize(50);
@@ -107,15 +111,17 @@ public class UserController {
                 || StringUtils.hasText(userSearchInput.getLastname())
                 || StringUtils.hasText(userSearchInput.getAddress())
                 || StringUtils.hasText(userSearchInput.getDob())
-                || StringUtils.hasText(userSearchInput.getZipcode())) {
+                || StringUtils.hasText(userSearchInput.getZipcode())
+                || StringUtils.hasText(userSearchInput.getSsn())) {
             Pageable pageable = PageRequest.of(userSearchInput.getPage(), userSearchInput.getSize());
             Page<User> userPage;
-            userPage = userRepository.findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContains(
+            userPage = userRepository.findByFirstnameContainsAndLastnameContainsAndAddressContainsAndDobContainsAndZipContainsAndSsnContains(
                     userSearchInput.getFirstname(),
                     userSearchInput.getLastname(),
                     userSearchInput.getAddress(),
                     userSearchInput.getDob(),
                     userSearchInput.getZipcode(),
+                    userSearchInput.getSsn(),
                     pageable);
 
             userList = userPage.getContent();
