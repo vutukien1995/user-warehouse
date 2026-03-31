@@ -9,11 +9,13 @@ import lombok.Data;
 public class UserSearchInput {
 
     private String firstname;
+    private String middlename;
     private String lastname;
     private String address;
     private String dob;
     private String zipcode;
     private String ssn;
+    private String st;
     private Integer page;
     private Integer size;
 
